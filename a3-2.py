@@ -109,6 +109,7 @@ def gui_interface(company_type, position):
 
 
 # 在 web 界面上创建标题和描述
+st.set_page_config(page_title="绩效考核专家")
 st.title("绩效考核方案ai生成器")
 st.write("请输入企业类型和岗位，然后点击提交来生成一个绩效考核方案。")
 
