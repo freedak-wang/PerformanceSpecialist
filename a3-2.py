@@ -1,13 +1,14 @@
 import os
 import openai
-from dotenv import load_dotenv, find_dotenv
+# from dotenv import load_dotenv, find_dotenv
 import json
 import streamlit as st  # 导入 streamlit 库
 
-_ = load_dotenv(find_dotenv())  # read local .env file
+# _ = load_dotenv(find_dotenv())  # read local .env file
 
-openai.api_key = os.environ['OPENAI_API_KEY']
+# openai.api_key = os.environ['OPENAI_API_KEY']
 
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 def get_completion_and_token_count(company_type, position,
                                    model="gpt-3.5-turbo",
