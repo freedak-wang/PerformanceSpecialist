@@ -65,9 +65,14 @@ def get_completion_and_token_count(company_type, position, performance_method,
 
 # 创建一个 web 界面的函数
 def gui_interface(company_type, position, performance_method):
-    # 调用上面的函数，获取绩效方案和 token 数量
-    performance_plan, token_dict = get_completion_and_token_count(company_type, position, performance_method)
-    # 返回绩效方案
+    try:
+        # 尝试获取绩效方案
+        performance_plan, token_dict = get_completion_and_token_count(company_type, position, performance_method)
+    except openai.OpenAiError as e:
+        # 如果获取绩效方案时出现异常，显示错误信息
+        st.write(f"获取绩效方案时发生错误: {str(e)}")
+        return
+
     return performance_plan
 
 
@@ -99,13 +104,21 @@ if st.sidebar.button("提交"):
     # 在主页上显示绩效方案
     st.json(performance_plan)
 
-    # 保存结果到 "绩效方案.json" 文件
-    with open('绩效方案.json', 'a', encoding='utf-8') as f:
-        f.write(performance_plan + ",\n")
+    try:
+        # 尝试保存结果到 "绩效方案.json" 文件
+        with open('绩效方案.json', 'a', encoding='utf-8') as f:
+            f.write(performance_plan + ",\n")
+    except IOError as e:
+        # 如果保存文件时出现异常，显示错误信息
+        st.write(f"保存绩效方案时发生错误: {str(e)}")
 
-    # 读取文件的内容
-    with open('绩效方案.json', 'r', encoding='utf-8') as f:
-        file_content = f.read()
+    try:
+        # 尝试读取文件的内容
+        with open('绩效方案.json', 'r', encoding='utf-8') as f:
+            file_content = f.read()
+    except IOError as e:
+        # 如果读取文件时出现异常，显示错误信息
+        st.write(f"读取绩效方案时发生错误: {str(e)}")
 
     # 提供一个下载按钮，让用户下载 "绩效方案.json" 文件
     st.download_button("下载绩效方案", file_content, file_name='绩效方案.json', mime='application/json')
